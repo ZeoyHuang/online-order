@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+<body>
+    <div id="root">
+        <script type="text/babel">
+            // (browser) DOM
+            const ele1 = document.createElement("h1"); // broser DOM element - Object
+            ele1.innerText = "hello world";
+            document.getElementById("root").append(ele1);
+
+            // virtual DOM
+            // createElement(type, props, ...children)
+            const ele2 = React.createElement("h1", null, "Hello World 2"); // Virtual DOM - Plain Object
+            // document.getElementById("root").append(ele2); // cannot do this directly. Has to do it through react-dom
+
+            // JSX
+            const ele3 = <h1>Hello World 3</h1>; // Virtual DOM
+
+            // function component
+            function Hello(){
+                return <h1>Hello world, function component</h1>;
+            }
+            //singular element
+            ReactDOM.render(<Hello/>,document.getElementById("root"));
+            //multiple elements
+            ReactDOM.render([<Hello/>,ele2,ele3],document.getElementById("root"));
+
+            const Hello2 = (props) => {
+                console.log("Hello2 props", props);
+                return <h3>Hello2</h3>;
+            }; // recommended
+
+
+            // class component - not recommended if you write new code
+            class Hello3 extends React.Component {
+                constructor(props) {
+                    super(props);
+                    console.log("Hello3 props", props);
+                }
+
+                render() {
+                    return <h3>Hello {this.props.name}</h3>;
+                }
+            }
+
+            // ReactDOM.render([<Hello />, ele2, ele3], document.getElementById("root"));
+            ReactDOM.render(
+            // This is how you pass props
+                [
+                    <Hello name="charlie" age="18" occupation="SDE" />,
+                    <Hello2 />,
+                    <Hello3 name="xiaozhang" age="40" occupation="CEO" />,
+                    <Hello3 name="xiaoWang" age="20" occupation="Student" />,
+                ],
+     document.getElementById("root")
+   );
+ 
+
+            function Hello(props) {
+                console.log("Hello Props", props);
+                return (
+                    <div>
+                        <h1>Hello {props.name} </h1>
+                        <h2>2 * 2 is {2 * 2}</h2>
+                    </div>
+                );
+            }
+
+        </script>
+    </div>
+</body>
+</html>

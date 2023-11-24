@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        class Parent extends React.Component {
+            constructor(props) {
+                super(props);
+                console.log("Parent props", props);
+                this.state = {
+                    balance: 1000,
+                    word: "不要把所有的鸡蛋放在同一个篮子里",
+                };
+
+                // binding
+                this.regularFunction = this.regularFunction.bind(this);
+            }
+
+            regularFunction() {
+                this.setState({
+                    balance:0,
+                });
+            }
+
+            regularFunctionWithoutBinding(amt) {
+                this.setState({
+                    balance: this.state.balance - amt,
+                });
+            }
+
+            arrowFunction = () => {
+                this.setState({
+                    balance: this.state.balance + 10,
+                });
+            }
+
+            render() {
+                return (
+                    <div>继承者们的故事
+                        <div>Parent</div>
+                        <div>Balance: {this.state.balance}</div>
+                        <button onClick={this.regularFunction}>
+                            Being audited, going to jail, leading to bankruptcy
+                        </button>
+                        <button onClick={
+                            this.regularFunctionWithoutBinding.bind(this, 10)
+                        }>Loss -10</button>
+                        <button onClick={
+                            () => this.regularFunctionWithoutBinding(20)
+                        }>Loss -20</button>
+                        <button onClick={this.arrowFunction}>Profit +10</button>
+                        <button onClick={() => alert("请好好报税")}>Tax evasion</button>
+                        <ChildA 
+                            balance={this.state.balance} 
+                            myTrust={this.regularFunction}
+                        />
+                        <ChildB 
+                            balance={this.state.balance}
+                            myTrust={() => {
+                                alert("傻孩子，别学你哥哥");
+                            }}
+                            makeMoney={() => this.regularFunctionWithoutBinding(amt)}
+                        />
+                    </div>
+                );
+            }
+        }
+
+        class ChildA extends React.Component {
+            render() {
+                return (
+                    <div>ChildA
+                        <div>父母账号余额: {this.props.balance}</div>
+                        <button onClick={this.props.myTrust}>偷钱</button>
+                    </div>
+                );
+            }
+        }
+
+        class ChildB extends React.Component {
+            render() {
+                return (
+                    <div>ChildB
+                        <div>父母账号余额: {this.props.balance}</div>
+                        <button onClick={this.props.myTrust}>我是好孩子</button>
+                        <button onClick={() => this.props.makeMoney(66666)}>花钱</button>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <Parent CompanyName="myGoogle" myJobTitle="founder & CEO"/>, 
+            document.getElementById("root")
+        );
+    </script>
+</body>
+</html>
